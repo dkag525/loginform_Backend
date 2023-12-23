@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 const port = 7000;
@@ -6,19 +5,13 @@ const port = 7000;
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 
-// const DB =
-//   "mongodb://loginform:loginform@ac-mhwr4fh-shard-00-00.goq0nte.mongodb.net:27017,ac-mhwr4fh-shard-00-01.goq0nte.mongodb.net:27017,ac-mhwr4fh-shard-00-02.goq0nte.mongodb.net:27017/mernstackloginform?ssl=true&replicaSet=atlas-2clrfs-shard-0&authSource=admin&retryWrites=true&w=majority";
-
 const User = require("./model/userSchema");
 
-const mongodb = require("./db/conn");
-mongodb();
-// mongoose
-//   .connect(DB)
-//   .then(() => {
-//     console.log("connection successful");
-//   })
-//   .catch((err) => console.log("no connection"));
+const connectdb = require("./db/conn");
+connectdb();
+
+app.use(express.json());
+app.use(require("./router/auth"));
 
 //middleware
 const middleware = (req, res, next) => {
@@ -26,9 +19,10 @@ const middleware = (req, res, next) => {
   next();
 };
 
-app.get("/", (req, res) => {
-  res.send("Hello Server");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello Server");
+// });
+
 app.get("/about", middleware, (req, res) => {
   console.log("Hello About");
   res.send("My About Page");
