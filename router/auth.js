@@ -64,6 +64,11 @@ router.post("/signin", async (req, res) => {
     token = await userLogin.generateAuthToken();
     console.log("Generate Token", token);
 
+    res.cookie("twtoken", token, {
+      expire: new Date(Date.now() + 25892000000),
+      httpOnly: true,
+    });
+
     if (!isMatch) {
       return res.json({ error: "Invalid Credientials" });
     } else {

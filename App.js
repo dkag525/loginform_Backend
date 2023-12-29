@@ -27,6 +27,11 @@ app.get("/about", middleware, (req, res) => {
   console.log("Hello About");
   res.send("My About Page");
 });
+app.get("/contact", middleware, (req, res) => {
+  res.cookie("Test", "Thapa");
+  console.log("Hello About");
+  res.send("My About Page");
+});
 
 app.listen(port, (req, res) => {
   console.log(`Server Is running on port ${port}`);
