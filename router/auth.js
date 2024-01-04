@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
   res.send("Hello Server from router js");
 });
 
-router.post("/register", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { name, email, phone, work, password, cpassword } = req.body;
   //   res.json({ message: req.body });
   if (!name || !email || !phone || !work || !password || !cpassword) {
