@@ -3,6 +3,7 @@ const router = express.Router();
 router.use(express.json());
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const authenticate = require("../middleware/Authenticate");
 
 require("../db/conn");
 const UserModel = require("../model/userSchema");
@@ -77,6 +78,13 @@ router.post("/signin", async (req, res) => {
   } catch (error) {
     console.log({ error: "Signin Not Working" });
   }
+});
+
+// about ka page
+
+router.get("/about", authenticate, (req, res) => {
+  console.log("Hello About");
+  res.send(req.rootUser);
 });
 
 module.exports = router;

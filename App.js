@@ -17,20 +17,22 @@ app.use(express.json());
 app.use(require("./router/auth"));
 
 //middleware
-const middleware = (req, res, next) => {
-  console.log("Hello middleware");
-  next();
-};
+// const middleware = (req, res, next) => {
+//   console.log("Hello middleware");
+//   next();
+// };
 
 // app.get("/", (req, res) => {
 //   res.send("Hello Server");
 // });
 
-app.get("/about", middleware, (req, res) => {
-  console.log("Hello About");
-  res.send("My About Page");
-});
-app.get("/contact", middleware, (req, res) => {
+// Moves to Auth
+
+// app.get("/about", (req, res) => {
+//   console.log("Hello About");
+//   res.send("My About Page");
+// });
+app.get("/contact", (req, res) => {
   res.cookie("Test", "Thapa");
   console.log("Hello About");
   res.send("My About Page");
