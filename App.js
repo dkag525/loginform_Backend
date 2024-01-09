@@ -8,7 +8,7 @@ app.use(cors());
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 
-const User = require("./model/userSchema");
+const UserModel = require("./model/userSchema");
 
 const connectdb = require("./db/conn");
 connectdb();

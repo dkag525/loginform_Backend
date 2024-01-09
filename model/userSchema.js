@@ -30,15 +30,14 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-  },
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true,
-      },
+    get: function () {
+      // Format the date as per Indian style
+      return this.createdAt.toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+      });
     },
-  ],
+  },
+  tokens: [{ token: { type: String, required: true } }],
 });
 
 //.........//
@@ -54,12 +53,15 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.generateAuthToken = async function () {
   try {
     let token = jwt.sign({ _id: this._id.toString() }, process.env.SECRET_KEY);
-    console.log(token);
+    console.log("this is my token no. :", token);
     console.log("Token generate in userSchema:", token);
     this.tokens = this.tokens.concat({ token: token });
     await this.save();
     return token;
-  } catch (error) {}
+  } catch (error) {
+    window.alert("Token not genrated");
+    console.log("Token not genrated");
+  }
 };
 
 const Users = mongoose.model("usercollection", userSchema);

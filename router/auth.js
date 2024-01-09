@@ -3,10 +3,10 @@ const router = express.Router();
 router.use(express.json());
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const authenticate = require("../middleware/Authenticate");
 
 require("../db/conn");
 const UserModel = require("../model/userSchema");
+const Authenticate = require("../middleware/authenticate");
 
 router.get("/", (req, res) => {
   res.send("Hello Server from router js");
@@ -34,9 +34,9 @@ router.post("/signup", async (req, res) => {
         password,
         cpassword,
       });
-      console.log("ram");
+      console.log("New Model Created");
       await user.save();
-      console.log("shyam");
+      console.log("Model Saved in Database");
       res.status(201).json({ message: "user registered successfuly" });
     }
 
@@ -66,7 +66,6 @@ router.post("/signin", async (req, res) => {
     console.log("Generate Token", token);
 
     res.cookie("twtoken", token, {
-      expire: new Date(Date.now() + 25892000000),
       httpOnly: true,
     });
 
@@ -82,8 +81,13 @@ router.post("/signin", async (req, res) => {
 
 // about ka page
 
-router.get("/about", authenticate, (req, res) => {
+router.get("/about", Authenticate, (req, res) => {
   console.log("Hello About");
+  res.send(req.rootUser);
+});
+
+router.get("/getdata", Authenticate, (req, res) => {
+  console.log("Hello getdata");
   res.send(req.rootUser);
 });
 
