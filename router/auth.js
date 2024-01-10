@@ -65,7 +65,7 @@ router.post("/signin", async (req, res) => {
     token = await userLogin.generateAuthToken();
     console.log("Generate Token", token);
 
-    res.cookie("twtoken", token, {
+    res.cookie("jwtoken", token, {
       httpOnly: true,
     });
 
@@ -89,6 +89,39 @@ router.get("/about", Authenticate, (req, res) => {
 router.get("/getdata", Authenticate, (req, res) => {
   console.log("Hello getdata");
   res.send(req.rootUser);
+});
+
+// Contact us page
+
+router.post("/contact", Authenticate, async (req, res) => {
+  try {
+    const { name, email, phone, message } = req.body;
+    if (!name || !email || !phone || !message) {
+      console.log("Pls fill the contact form");
+      return res.json({ error: "Pls fill the contact form" });
+    }
+    const userContact = await UserModel.findOne({ _id: req.userID });
+    console.log("userContact", userContact);
+    if (userContact) {
+      const userMessage = await userContact.addMessage(
+        name,
+        email,
+        phone,
+        message
+      );
+      console.log("userMessage", userMessage);
+      await userContact.save();
+      res.status(201).json({ message: "Messsage save successfully" });
+    }
+  } catch (error) {}
+});
+
+// Logout Page
+
+router.get("/logout", (req, res) => {
+  console.log("Hello my logout page");
+  res.clearCookie("jwtoken", { path: "/" });
+  res.status(200).send("User Logout"); // Corrected syntax
 });
 
 module.exports = router;
